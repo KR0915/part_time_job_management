@@ -109,7 +109,7 @@
  * included primarily as a development convenience - and
  * thus not recommended for production applications.
  */
-	//Configure::write('App.baseUrl', env('SCRIPT_NAME'));
+Configure::write('App.fullBaseUrl', 'http://localhost/part_time_worker');
 
 /**
  * To configure CakePHP to use a particular domain URL

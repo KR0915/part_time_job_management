@@ -1,0 +1,42 @@
+/* app/webroot/css/style.css */
+
+button, .button {
+    display: inline-block;
+    padding: 5px 10px; /* 文字に合わせた大きさ */
+    font-size: 16px;
+    color: #000;
+    background-color: transparent; /* 色なし */
+    border: 2px solid #000; /* 黒の枠線 */
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #f0f0f0; /* ホバー時の背景色 */
+}
+
+.button:active {
+    background-color: #d0d0d0; /* アクティブ時の背景色 */
+}
+
+.table-button {
+    padding: 3px 6px; /* 文字に合わせた大きさ */
+    font-size: 14px;
+    color: #000;
+    background-color: transparent; /* 色なし */
+    border: 2px solid #000; /* 黒の枠線 */
+    border-radius: 3px;
+    text-decoration: none;
+    margin: 2px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.table-button:hover {
+    background-color: #f0f0f0; /* ホバー時の背景色 */
+}
+
+.table-button:active {
+    background-color: #d0d0d0; /* アクティブ時の背景色 */
+}
