@@ -27,6 +27,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
     <?php
         // echo $this->Html->css('cake.generic');
 		echo $this->Html->css('layout');
+		echo $this->Html->css('header');
         echo $this->fetch('meta');
         echo $this->fetch('css');
         echo $this->fetch('script');
@@ -38,6 +39,9 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
         <div id="content">
             <?php echo $this->Flash->render(); ?>
             <?php echo $this->fetch('content'); ?>
+        </div>
+        <div id="footer">
+            <!-- フッターの内容をここに追加 -->
         </div>
     </div>
     <?php echo $this->element('sql_dump'); ?>
