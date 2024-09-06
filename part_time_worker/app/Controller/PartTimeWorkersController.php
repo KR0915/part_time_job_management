@@ -38,7 +38,9 @@ class PartTimeWorkersController extends AppController {
     }
 
     public function logout() {
-        return $this->redirect($this->Auth->logout());
+        $this->Auth->logout();
+        $this->Session->setFlash(__('You have been logged out.'));
+        return $this->redirect('/part_time_workers/login');
     }
     
     public function index() {
