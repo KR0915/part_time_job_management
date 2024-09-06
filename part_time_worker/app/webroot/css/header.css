@@ -4,7 +4,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 30px; /* 上下のパディングを20pxに、左右のパディングを10pxに設定 */
+    padding: 20px 30px; /* 上下のパディングを20pxに、左右のパディングを30pxに設定 */
     background-color: #003d4c;
 }
 
@@ -21,14 +21,28 @@
     align-items: center;
 }
 
-a.logout {
+.button-group {
+    display: flex;
+    gap: 20px; /* ボタン間のスペースを設定 */
+}
+
+a.logout, .button.history, .attendance.record {
     font-size: 18px;
     color: #fff;
     background-color: transparent;
     border: none;
     cursor: pointer;
-    padding: 0;
-    text-decoration: underline;
+    padding: 10px 10px; /* パディングを追加 */
     text-decoration: none; /* アンダーバーを削除 */
     font-weight: bold; /* 文字の太さを追加 */
+    border-radius: 5px; /* 角を丸くする */
+    display: flex;
+    align-items: center; /* ボタン内のテキストを中央揃え */
+}
+
+a.logout:hover, .button.history:hover, .attendance.record:hover {
+    color: #fff; /* ホバー時の色を元の色と同じに設定 */
+    background-color: transparent; /* 背景色を変更しない */
+    border: none; /* ボーダーを変更しない */
+    text-decoration: none; /* アンダーバーを削除 */
 }
