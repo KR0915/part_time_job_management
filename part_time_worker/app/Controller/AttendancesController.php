@@ -47,10 +47,15 @@ class AttendancesController extends AppController {
     }
 
     public function index($workerId) {
+        // 本日の日付を取得
+        $today = date('Y-m-d');
         // 必要なデータを取得してビューに渡す
         $this->set('workerId', $workerId);
         $this->set('attendances', $this->Attendance->find('all', array(
-            'conditions' => array('Attendance.part_time_worker_id' => $workerId)
+            'conditions' => array(
+                'Attendance.part_time_worker_id' => $workerId,
+                'DATE(Attendance.check_in)' => $today // 本日の出退勤情報のみ取得
+            )
         )));
     }
 }
