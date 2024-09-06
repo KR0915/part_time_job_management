@@ -1,33 +1,34 @@
 /* app/webroot/css/header.css */
+
 #header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px; /* 上下のパディングを20pxに、左右のパディングを10pxに設定 */
     background-color: #003d4c;
-    color: #fff;
-    padding: 10px;
-    text-align: left; /* 追加: 全体のテキストを左寄せ */
 }
 
 #header h1 {
     margin: 0;
-    font-size: 2em;
-    text-align: left; /* 追加: h1要素を左寄せ */
-}
-
-#header nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#header nav ul li {
-    display: inline;
-    margin-right: 10px;
-}
-
-#header nav ul li a {
+    font-size: 24px;
     color: #fff;
-    text-decoration: none;
+    font-weight: bold;
 }
 
-#header nav ul li a:hover {
+.logout-button {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+a.logout {
+    font-size: 18px;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
     text-decoration: underline;
+    text-decoration: none; /* アンダーバーを削除 */
+    font-weight: bold; /* 文字の太さを追加 */
 }
