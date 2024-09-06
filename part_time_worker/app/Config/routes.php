@@ -32,6 +32,7 @@
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
 	Router::connect('/part_time_worker/part_time_workers/login', array('controller' => 'part_time_workers', 'action' => 'login'));
+	
 	Router::connect('/part_time_worker/attendances/index/:id', 
     array('controller' => 'attendances', 'action' => 'index'), 
     array('pass' => array('id'), 'id' => '[0-9]+')

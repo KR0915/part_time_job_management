@@ -1,8 +1,8 @@
-/* app/webroot/css/style.css */
+/* app/webroot/css/attendance.css */
 
 button, .button {
     display: inline-block;
-    padding: 5px 10px; /* 文字に合わせた大きさ */
+    padding: 10px 20px; /* ボタンの大きさを調整 */
     font-size: 16px;
     color: #000;
     background-color: transparent; /* 色なし */
@@ -39,4 +39,16 @@ button, .button {
 
 .table-button:active {
     background-color: #d0d0d0; /* アクティブ時の背景色 */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* ボタン間の間隔を調整 */
+}
+
+#current-time {
+    font-size: 24px; /* 時刻表示のフォントサイズを大きく */
+    text-align: center; /* 時刻表示を中央に配置 */
+    margin-bottom: 20px; /* 下部の余白を追加 */
 }
