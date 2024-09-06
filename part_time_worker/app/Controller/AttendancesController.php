@@ -1,29 +1,21 @@
 <?php
 class AttendancesController extends AppController {
-    public function beforeFilter() {
-        parent::beforeFilter();
-        $this->Auth->allow('index', 'add'); // インデックスと追加アクションを許可
-    }
-
-    public function index($workerId) {
-        if ($workerId === null) {
-            $workerId = $this->Auth->user('id'); // ログインしているユーザーのIDを取得
-            return $this->redirect(array('action' => 'index', $workerId)); // ユーザーIDをURLに追加してリダイレクト
-        }
-        $this->set('workerId', $workerId); // ビューにユーザーIDを渡す
-        $this->set('attendances', $this->Attendance->find('all'));
-    }
-
     public function checkIn($workerId) {
         $this->Attendance->create();
-        $this->Attendance->save(array(
+        if ($this->Attendance->save(array(
             'Attendance' => array(
                 'part_time_worker_id' => $workerId,
                 'check_in' => date('Y-m-d H:i:s')
             )
-        ));
-        $this->Flash->success(__('Checked in successfully.'));
-        return $this->redirect(array('action' => 'index', $workerId));
+        ))) {
+            $this->Session->setFlash(__('Checked in successfully.'), 'default', array('class' => 'success'));
+            // リダイレクト先を指定
+            return $this->redirect(array('controller' => 'attendances', 'action' => 'index', $workerId));
+        } else {
+            $this->Session->setFlash(__('Check-in failed.'), 'default', array('class' => 'error'));
+            // リダイレクト先を指定
+            return $this->redirect(array('controller' => 'attendances', 'action' => 'index', $workerId));
+        }
     }
 
     public function checkOut($workerId) {
@@ -31,35 +23,34 @@ class AttendancesController extends AppController {
             'conditions' => array(
                 'Attendance.part_time_worker_id' => $workerId,
                 'Attendance.check_out' => null
-            ),
-            'order' => array('Attendance.check_in' => 'DESC')
+            )
         ));
         if ($attendance) {
-            $attendance['Attendance']['check_out'] = date('Y-m-d H:i:s');
-            $this->Attendance->save($attendance);
-            $this->Flash->success(__('Checked out successfully.'));
-        } else {
-            $this->Flash->error(__('No check-in record found.'));
-        }
-        return $this->redirect(array('action' => 'index', $workerId));
-    }
-
-    public function break() {
-        // 休憩処理をここに記述
-        $this->Flash->success(__('Break started successfully.'));
-        return $this->redirect(array('action' => 'index', $workerId));
-    }
-
-    public function add() {
-        if ($this->request->is('post')) {
-            $this->Attendance->create();
-            if ($this->Attendance->save($this->request->data)) {
-                $this->Flash->success(__('The attendance has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+            $this->Attendance->id = $attendance['Attendance']['id'];
+            if ($this->Attendance->saveField('check_out', date('Y-m-d H:i:s'))) {
+                $this->Session->setFlash(__('Checked out successfully.'), 'default', array('class' => 'success'));
+            } else {
+                $this->Session->setFlash(__('Check-out failed.'), 'default', array('class' => 'error'));
             }
-            $this->Flash->error(__('Unable to add the attendance.'));
+        } else {
+            $this->Session->setFlash(__('No check-in record found.'), 'default', array('class' => 'error'));
         }
-        $partTimeWorkers = $this->Attendance->PartTimeWorker->find('list');
-        $this->set(compact('partTimeWorkers'));
+        // リダイレクト先を指定
+        return $this->redirect(array('controller' => 'attendances', 'action' => 'index', $workerId));
+    }
+    
+    public function break($workerId) {
+        // 休憩の処理を追加
+        $this->Session->setFlash(__('Break started successfully.'), 'default', array('class' => 'success'));
+        // リダイレクト先を指定
+        return $this->redirect(array('controller' => 'attendances', 'action' => 'index', $workerId));
+    }
+
+    public function index($workerId) {
+        // 必要なデータを取得してビューに渡す
+        $this->set('workerId', $workerId);
+        $this->set('attendances', $this->Attendance->find('all', array(
+            'conditions' => array('Attendance.part_time_worker_id' => $workerId)
+        )));
     }
 }
