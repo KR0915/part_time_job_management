@@ -58,17 +58,4 @@ class AttendancesController extends AppController {
             )
         )));
     }
-
-    public function workHistory($workerId) {
-        // 必要なデータを取得してビューに渡す
-        $this->set('workerId', $workerId);
-        $this->set('attendances', $this->Attendance->find('all', array(
-            'conditions' => array(
-                'Attendance.part_time_worker_id' => $workerId,
-                'Attendance.date >=' => date('Y-m-01'), // 今月の初日
-                'Attendance.date <=' => date('Y-m-t')   // 今月の最終日
-            ),
-            'order' => array('Attendance.date' => 'DESC') // 日付を降順で取得
-        )));
-    }
 }

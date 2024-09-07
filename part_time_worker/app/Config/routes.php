@@ -38,6 +38,11 @@
     array('pass' => array('id'), 'id' => '[0-9]+')
 	);
 
+	
+	Router::connect('/part_time_worker/part_time_workers/workHistory/:id', 
+		array('controller' => 'part_time_workers', 'action' => 'workHistory'), 
+		array('pass' => array('id'), 'id' => '[0-9]+')
+	);
 
 	CakePlugin::routes();
 

@@ -1,6 +1,8 @@
 <?php
 // app/Controller/PartTimeWorkersController.php
 class PartTimeWorkersController extends AppController {
+    public $uses = array('PartTimeWorker', 'Attendance'); // 使用するモデルを指定
+
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow('login', 'add');
@@ -68,5 +70,21 @@ class PartTimeWorkersController extends AppController {
             }
             $this->Flash->error(__('Unable to add the part-time worker.'));
         }
+    }
+
+    public function workHistory($workerId) {
+        $this->log('workHistoryアクションが呼び出されました。', 'debug');
+        $this->log('workerId: ' . $workerId, 'debug');
+        // 必要なデータを取得してビューに渡す
+        $this->set('workerId', $workerId);
+        $this->set('attendances', $this->Attendance->find('all', array(
+            'conditions' => array(
+                'Attendance.part_time_worker_id' => $workerId,
+                'Attendance.check_in >=' => date('Y-m-01'), // 今月の初日
+                'Attendance.check_in <=' => date('Y-m-t')   // 今月の最終日
+            ),
+            'order' => array('Attendance.check_in' => 'ASC') // 日付を降順で取得
+        )));
+        $this->log('attendances: ' . print_r($attendances, true), 'debug');
     }
 }

@@ -34,7 +34,7 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-	Configure::write('debug', 0);
+	Configure::write('debug', 2);
 
 /**
  * Configure the Error handler used to handle errors for your application. By default
@@ -230,15 +230,17 @@ Configure::write('App.fullBaseUrl', 'http://localhost/part_time_worker');
 		'defaults' => 'php'
 	));
 
-/**
- * A random string used in security hashing methods.
- */
-	Configure::write('Security.salt', 'DYhG93b0qyJfIxfs2guVoUubWwvniR2G0FgaC9mi');
-
-/**
- * A random numeric string (digits only) used to encrypt/decrypt strings.
- */
-	Configure::write('Security.cipherSeed', '76859309657453542496749683645');
+	// app/Config/core.php
+	
+	/**
+	 * A random string used in security hashing methods.
+	 */
+	Configure::write('Security.salt', '4f1c2e3b5a6d7e8f9g0h1i2j3k4l5m6n');
+	
+	/**
+	 * A random numeric string (digits only) used to encrypt/decrypt strings.
+	 */
+	Configure::write('Security.cipherSeed', '987654321098765432109876543210');
 
 /**
  * Apply timestamps with the last modified time to static assets (js, css, images).
