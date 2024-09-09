@@ -1,5 +1,7 @@
 <?php
 class AttendancesController extends AppController {
+    public $uses = array('Attendance', 'SubmittedTimesheet', 'ConfirmedTimesheet');
+
     public function checkIn($workerId) {
         $this->Attendance->create();
         if ($this->Attendance->save(array(
@@ -84,6 +86,33 @@ class AttendancesController extends AppController {
         return $this->redirect(array('controller' => 'attendances', 'action' => 'index', $workerId));
     }
 
+    public function submitTimesheet($workerId) {
+        $this->set('workerId', $workerId);
+        if ($this->request->is('post')) {
+            $data = $this->request->data['SubmittedTimesheet'];
+            $data['part_time_worker_id'] = $workerId; // ルートから渡されたworkerIdを使用
+
+            $this->log('Worker ID: ' . $workerId, 'debug');
+            $this->log('Submitted Data: ' . print_r($data, true), 'debug');
+    
+            if ($this->SubmittedTimesheet->save($data)) {
+                $this->Session->setFlash(__('出勤情報が保存されました。'), 'default', array('class' => 'success'));
+            } else {
+                $this->Session->setFlash(__('出勤情報の保存に失敗しました。'), 'default', array('class' => 'error'));
+            }
+        }
+    }
+
+    public function calendar($workerId) {
+        $attendances = $this->Attendance->find('all', array(
+            'conditions' => array('Attendance.part_time_worker_id' => $workerId)
+        ));
+        $confirmedTimesheets = $this->ConfirmedTimesheet->find('all', array(
+            'conditions' => array('ConfirmedTimesheet.part_time_worker_id' => $workerId)
+        ));
+        $this->set(compact('attendances', 'confirmedTimesheets', 'workerId'));
+    }
+    
     public function index($workerId) {
         $today = date('Y-m-d');
         $this->set('workerId', $workerId);

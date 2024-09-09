@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+#calendar {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.submit-form {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.submit-form .button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.submit-form .button:hover {
+    background-color: #0056b3;
+}
+
+.confirmed-timesheets {
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.confirmed-timesheets h2 {
+    color: #333;
+    text-align: center;
+}
+
+.confirmed-timesheets table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.confirmed-timesheets th, .confirmed-timesheets td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.confirmed-timesheets th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.confirmed-timesheets tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.confirmed-timesheets tr:hover {
+    background-color: #f1f1f1;
+}

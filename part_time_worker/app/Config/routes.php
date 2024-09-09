@@ -44,6 +44,9 @@
 		array('pass' => array('id'), 'id' => '[0-9]+')
 	);
 
+
+	Router::connect('/part_time_worker/attendances/submitTimesheet/:workerId', array('controller' => 'attendances', 'action' => 'submitTimesheet'), array('pass' => array('workerId'), 'workerId' => '[0-9]+'));
+
 	CakePlugin::routes();
 
 /**
