@@ -3,7 +3,16 @@ App::uses('AppController', 'Controller');
 
 class CompaniesController extends AppController {
     public function index() {
-        $this->set('companies', $this->Company->find('all'));
+        $conditions = array();
+        
+        if ($this->request->is('get') && !empty($this->request->query('name'))) {
+            $name = $this->request->query('name');
+            $conditions['Company.name LIKE'] = '%' . $name . '%';
+        }
+
+        $this->set('companies', $this->Company->find('all', array(
+            'conditions' => $conditions
+        )));
     }
 
     public function add() {
