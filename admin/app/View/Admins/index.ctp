@@ -1,0 +1,1 @@
+<a href="<?php echo $this->Html->url(array('controller' => 'companies', 'action' => 'index', 'admin' => true)); ?>">Companies Index View</a>
