@@ -1,4 +1,9 @@
 <h1>Companies</h1>
+
+<?php echo $this->Form->create('Company', array('type' => 'get')); ?>
+<?php echo $this->Form->input('name', array('label' => 'Search by Company Name', 'value' => $this->request->query('name'))); ?>
+<?php echo $this->Form->end('Search'); ?>
+
 <table>
     <tr>
         <th>ID</th>

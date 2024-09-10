@@ -29,6 +29,7 @@
 	Router::connect('/admin', array('controller' => 'admins', 'action' => 'index')); // 追加
 	Router::connect('/admin/admins/login', array('controller' => 'admins', 'action' => 'login')); // 修正
 	Router::connect('/admin/companies/index', array('controller' => 'companies', 'action' => 'index')); // 修正
+	Router::connect('/admin/companies/add', array('controller' => 'companies', 'action' => 'add')); // 修正
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */
