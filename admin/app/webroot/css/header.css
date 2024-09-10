@@ -1,10 +1,12 @@
 /* app/webroot/css/header.css */
 
+/* app/webroot/css/header.css */
+
 #header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 40px 60px; /* 上下のパディングを20pxに、左右のパディングを30pxに設定 */
+    padding: 20px 30px; /* 上下のパディングを20pxに、左右のパディングを30pxに設定 */
     background-color: #003d4c;
 }
 
@@ -14,6 +16,11 @@
     color: #fff;
     font-weight: bold;
     text-decoration: none;
+}
+
+#header h1 a {
+    color: #fff; /* リンクの文字色を白色に設定 */
+    text-decoration: none; /* リンクの下線を削除 */
 }
 
 .logout-button {
