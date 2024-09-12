@@ -34,4 +34,33 @@ class ManagersController extends AppController {
         $companies = $this->Company->find('list');
         $this->set(compact('companies'));
     }
+
+    public function edit($id = null) {
+        $companies = $this->Company->find('list', array(
+            'fields' => array('Company.id', 'Company.name')
+        ));
+        $this->set(compact('companies'));
+        
+        if (!$id) {
+            throw new NotFoundException(__('Invalid company'));
+        }
+
+        $manager = $this->Manager->findById($id);
+        if (!$manager) {
+            throw new NotFoundException(__('Invalid company'));
+        }
+
+        if ($this->request->is(array('post', 'put'))) {
+            $this->Manager->id = $id;
+            if ($this->Manager->save($this->request->data)) {
+                $this->Flash->success(__('Your company has been updated.'));
+                return $this->redirect(array('action' => 'index'));
+            }
+            $this->Flash->error(__('Unable to update your company.'));
+        }
+
+        if (!$this->request->data) {
+            $this->request->data = $manager;
+        }
+    }
 }

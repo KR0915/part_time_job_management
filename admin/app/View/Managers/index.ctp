@@ -1,4 +1,4 @@
-<h1>Managers List</h1>
+<h1>店長一覧</h1>
 <table>
     <thead>
         <tr>
@@ -23,5 +23,5 @@
         </tr>
         <?php endforeach; ?>
     </tbody>
-    <?php echo $this->Html->link('店長追加', array('action' => 'add', 'admin' => true)); ?>
 </table>
+<p><?php echo $this->Html->link('店長追加', array('action' => 'add', 'admin' => true)); ?></p>
