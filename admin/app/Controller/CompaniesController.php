@@ -46,4 +46,45 @@ class CompaniesController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
+
+    public function toggleStatus($id) {
+        $this->Company->id = $id;
+        $company = $this->Company->findById($id);
+        if (!$company) {
+            $this->Flash->error(__('Invalid company.'));
+            return $this->redirect(array('action' => 'index'));
+        }
+    
+        $newStatus = ($company['Company']['status'] === 'active') ? 'inactive' : 'active';
+        if ($this->Company->saveField('status', $newStatus)) {
+            $this->Flash->success(__('The company status has been updated.'));
+        } else {
+            $this->Flash->error(__('Unable to update the company status.'));
+        }
+        return $this->redirect(array('action' => 'index'));
+    }
+
+    public function edit($id = null) {
+        if (!$id) {
+            throw new NotFoundException(__('Invalid company'));
+        }
+
+        $company = $this->Company->findById($id);
+        if (!$company) {
+            throw new NotFoundException(__('Invalid company'));
+        }
+
+        if ($this->request->is(array('post', 'put'))) {
+            $this->Company->id = $id;
+            if ($this->Company->save($this->request->data)) {
+                $this->Flash->success(__('Your company has been updated.'));
+                return $this->redirect(array('action' => 'index'));
+            }
+            $this->Flash->error(__('Unable to update your company.'));
+        }
+
+        if (!$this->request->data) {
+            $this->request->data = $company;
+        }
+    }
 }
