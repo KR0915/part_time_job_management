@@ -1,4 +1,4 @@
-<h1>Companies</h1>
+<h1>会社一覧</h1>
 
 <?php echo $this->Form->create('Company', array('type' => 'get')); ?>
 <?php echo $this->Form->input('name', array('label' => 'Search by Company Name', 'value' => $this->request->query('name'))); ?>
@@ -19,10 +19,15 @@
         <td><?php echo h($company['Company']['email']); ?></td>
         <td><?php echo h($company['Company']['status']); ?></td>
         <td>
-            <?php echo $this->Html->link('Deactivate', array('action' => 'deactivate', $company['Company']['id'])); ?>
+        <?php echo $this->Form->postLink(
+                    ($company['Company']['status'] === 'active') ? 'Deactivate' : 'Activate',
+                    array('action' => 'toggleStatus', $company['Company']['id']),
+                    array('confirm' => 'Are you sure?')
+                ); ?>
+            <?php echo $this->Html->link('Edit', array('action' => 'edit', $company['Company']['id'])); ?>
             <?php echo $this->Form->postLink('Delete', array('action' => 'delete', $company['Company']['id']), null, __('Are you sure?')); ?>
         </td>
     </tr>
     <?php endforeach; ?>
 </table>
-<p><?php echo $this->Html->link('Add Company', array('action' => 'add')); ?></p>
+<p><?php echo $this->Html->link('会社追加', array('action' => 'add')); ?></p>
