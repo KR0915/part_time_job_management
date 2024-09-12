@@ -50,6 +50,41 @@ class AdminsController extends AppController {
         }
     }
 
+    public function edit($id = null) {
+        if (!$id) {
+            throw new NotFoundException(__('Invalid company'));
+        }
+
+        $admin = $this->Admin->findById($id);
+        if (!$admin) {
+            throw new NotFoundException(__('Invalid company'));
+        }
+
+        if ($this->request->is(array('post', 'put'))) {
+            $this->Admin->id = $id;
+            if ($this->Admin->save($this->request->data)) {
+                $this->Flash->success(__('Your company has been updated.'));
+                return $this->redirect(array('action' => 'index'));
+            }
+            $this->Flash->error(__('Unable to update your company.'));
+        }
+
+        if (!$this->request->data) {
+            $this->request->data = $admin;
+        }
+    }
+
+    public function delete($id) {
+        if ($this->request->is('post')) {
+            if ($this->Admin->delete($id)) {
+                $this->Flash->success(__('The company has been deleted.'));
+            } else {
+                $this->Flash->error(__('Unable to delete the company.'));
+            }
+            return $this->redirect(array('action' => 'index'));
+        }
+    }
+
     public function index() {
         // Your code here
     }
