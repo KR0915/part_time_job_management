@@ -86,31 +86,84 @@ class AttendancesController extends AppController {
         return $this->redirect(array('controller' => 'attendances', 'action' => 'index', $workerId));
     }
 
-    public function submitTimesheet($workerId) {
-        $this->set('workerId', $workerId);
-        if ($this->request->is('post')) {
-            $data = $this->request->data['SubmittedTimesheet'];
-            $data['part_time_worker_id'] = $workerId; // ルートから渡されたworkerIdを使用
 
-            $this->log('Worker ID: ' . $workerId, 'debug');
-            $this->log('Submitted Data: ' . print_r($data, true), 'debug');
-    
-            if ($this->SubmittedTimesheet->save($data)) {
-                $this->Session->setFlash(__('出勤情報が保存されました。'), 'default', array('class' => 'success'));
-            } else {
-                $this->Session->setFlash(__('出勤情報の保存に失敗しました。'), 'default', array('class' => 'error'));
-            }
-        }
+    public function submitTimesheet($workerId) {
+        // 出勤情報を取得
+        $submittedTimesheets = $this->SubmittedTimesheet->find('all', array(
+            'conditions' => array(
+                'SubmittedTimesheet.part_time_worker_id' => $workerId,
+            ),
+            'fields' => array('SubmittedTimesheet.date')
+        ));
+
+        // 日付のみの配列を作成
+        $submittedDates = Hash::extract($submittedTimesheets, '{n}.SubmittedTimesheet.date');
+
+        // ビューにデータを渡す
+        $this->set(compact('submittedDates', 'workerId'));
     }
 
-    public function calendar($workerId) {
-        $attendances = $this->Attendance->find('all', array(
-            'conditions' => array('Attendance.part_time_worker_id' => $workerId)
+    public function editSubmittedTimesheet($workerId, $date) {
+        // 出勤情報を取得
+        $submittedTimesheet = $this->SubmittedTimesheet->find('first', array(
+            'conditions' => array(
+                'SubmittedTimesheet.part_time_worker_id' => $workerId,
+                'SubmittedTimesheet.date' => $date
+            )
         ));
-        $confirmedTimesheets = $this->ConfirmedTimesheet->find('all', array(
-            'conditions' => array('ConfirmedTimesheet.part_time_worker_id' => $workerId)
-        ));
-        $this->set(compact('attendances', 'confirmedTimesheets', 'workerId'));
+    
+        // POSTまたはPUTリクエストの場合、データを保存
+        if ($this->request->is(array('post', 'put'))) {
+            // 既存のデータがある場合、そのIDを設定
+            if (!empty($submittedTimesheet)) {
+                $this->SubmittedTimesheet->id = $submittedTimesheet['SubmittedTimesheet']['id'];
+            } else {
+                $this->SubmittedTimesheet->create();
+            }
+    
+            // リクエストデータにworkerIdとdateを設定
+            $this->request->data['SubmittedTimesheet']['part_time_worker_id'] = $workerId;
+            $this->request->data['SubmittedTimesheet']['date'] = $date;
+    
+            // データを保存
+            if ($this->SubmittedTimesheet->save($this->request->data)) {
+                $this->Session->setFlash(__('出勤情報が更新されました。'));
+                return $this->redirect(array('action' => 'submitTimesheet', $workerId));
+            }
+            $this->Flash->error(__('出勤情報の更新に失敗しました。もう一度お試しください。'));
+        }
+    
+        // 初期データをフォームに設定
+        if (!$this->request->data) {
+            $this->request->data = $submittedTimesheet;
+        }
+
+        $submittedTimesheetId = $submittedTimesheet['SubmittedTimesheet']['id'];
+        $this->set(compact('workerId', 'submittedTimesheetId', 'date'));
+    }
+
+    public function deleteSubmittedTimesheet($workerId, $date) {
+        if ($this->request->is('post')) {
+            // 日付形式のsubmittedTimesheetIdを使用して出勤簿を取得
+            $submittedTimesheet = $this->SubmittedTimesheet->find('first', array(
+                'conditions' => array(
+                    'SubmittedTimesheet.part_time_worker_id' => $workerId,
+                    'SubmittedTimesheet.date' => $date
+                )
+            ));
+    
+            if ($submittedTimesheet) {
+                // 出勤簿が存在する場合、削除を実行
+                if ($this->SubmittedTimesheet->delete($submittedTimesheet['SubmittedTimesheet']['id'])) {
+                    $this->Flash->success(__('出勤簿が削除されました。'));
+                } else {
+                    $this->Flash->error(__('出勤簿の削除に失敗しました。'));
+                }
+            } else {
+                $this->Flash->error(__('指定された出勤簿が見つかりません。'));
+            }
+        }
+        return $this->redirect(array('controller' => 'Attendances', 'action' => 'calendar', $workerId));
     }
     
     public function index($workerId) {

@@ -47,6 +47,28 @@
 
 	Router::connect('/part_time_worker/attendances/submitTimesheet/:workerId', array('controller' => 'attendances', 'action' => 'submitTimesheet'), array('pass' => array('workerId'), 'workerId' => '[0-9]+'));
 
+	Router::connect('/attendances/calendar/:workerId', array('controller' => 'attendances', 'action' => 'calendar'));
+
+	Router::connect(
+		'/attendances/getTimesheet/:workerId/:date',
+		array('controller' => 'attendances', 'action' => 'getTimesheet'),
+		array(
+			'pass' => array('workerId', 'date'),
+			'workerId' => '[0-9]+',
+			'date' => '[0-9]{4}-[0-9]{2}-[0-9]{2}'
+		)
+	);
+
+	Router::connect(
+		'/part_time_worker/attendances/editSubmittedTimesheet/:workerId/:date',
+		array('controller' => 'attendances', 'action' => 'editSubmittedTimesheet'),
+		array(
+			'pass' => array('workerId', 'date'),
+			'workerId' => '[0-9]+',
+			'date' => '[0-9]{4}-[0-9]{2}-[0-9]{2}'
+		)
+	);
+	
 	CakePlugin::routes();
 
 /**

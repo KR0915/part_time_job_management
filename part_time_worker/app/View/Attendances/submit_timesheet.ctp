@@ -6,9 +6,9 @@
     <?php echo $this->Html->css('submit_timesheet'); ?>
     <?php echo $this->Html->script('https://code.jquery.com/jquery-3.6.0.min.js'); ?>
 </head>
-<body>
+<body id="submit-timesheet-body"> <!-- bodyタグにIDを追加 -->
     <h1>出勤簿提出</h1>
-    <?php echo $this->element('calendar'); ?>
+    <?php echo $this->element('calendar', array('workerId' => $workerId, 'submittedDates' => $submittedDates)); ?>
     <br />
     <br />
 </body>
