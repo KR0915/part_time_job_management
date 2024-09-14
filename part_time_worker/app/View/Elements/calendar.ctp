@@ -3,48 +3,10 @@
     <div id="calendar" class="calendar"></div>
 </div>
 
-<!-- モーダルダイアログ -->
-<div id="attendance-modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>出勤情報を入力</h2>
-        <?php
-        echo $this->Form->create('SubmittedTimesheet', array('url' => array('controller' => 'attendances', 'action' => 'submitTimesheet', $workerId)));
-        ?>
-        <div class="form-group">
-            <?php
-            echo $this->Form->label('check_in', '出勤時間');
-            echo $this->Form->input('SubmittedTimesheet.check_in', array('type' => 'text', 'label' => false, 'div' => false, 'required' => true, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
-            ?>
-        </div>
-        <div class="form-group">
-            <?php
-            echo $this->Form->label('check_out', '退勤時間');
-            echo $this->Form->input('SubmittedTimesheet.check_out', array('type' => 'text', 'label' => false, 'div' => false, 'required' => true, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
-            ?>
-        </div>
-        <div class="form-group">
-            <?php
-            echo $this->Form->label('break_start', '休憩開始時間');
-            echo $this->Form->input('SubmittedTimesheet.break_start', array('type' => 'text', 'label' => false, 'div' => false, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
-            ?>
-        </div>
-        <div class="form-group">
-            <?php
-            echo $this->Form->label('break_end', '休憩終了時間');
-            echo $this->Form->input('SubmittedTimesheet.break_end', array('type' => 'text', 'label' => false, 'div' => false, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
-            ?>
-        </div>
-        <?php
-        echo $this->Form->input('SubmittedTimesheet.date', array('type' => 'hidden', 'id' => 'selected-date', 'default' => null));
-        echo $this->Form->end('保存');
-        ?>
-    </div>
-</div>
-
 <style>
     body {
         background-color: #ffffff; /* ページ全体の背景色を白に設定 */
+        overflow-x: hidden; /* 横スクロールを無効にする */
     }
     .calendar-header {
         text-align: center;
@@ -56,7 +18,8 @@
         grid-template-columns: repeat(7, 1fr);
         gap: 5px;
         margin: 20px auto;
-        max-width: 500px; /* カレンダーの幅を指定 */
+        max-width: 100%; /* カレンダーの幅を画面幅に収める */
+        box-sizing: border-box; /* パディングを含めて幅を計算 */
     }
     .calendar div {
         border: 1px solid #ccc;
@@ -70,8 +33,8 @@
     .calendar .day {
         cursor: pointer;
     }
-    .calendar .selected {
-        background-color: #f0f0f0;
+    .calendar .submitted {
+        background-color: #f0f0f0; /* 色を変更 */
     }
     .modal {
         display: none; /* Hidden by default */
@@ -108,6 +71,9 @@
 
 <script>
     $(document).ready(function() {
+        var submittedDates = <?php echo json_encode($submittedDates); ?>;
+        var workerId = <?php echo json_encode($workerId); ?>;
+
         function generateCalendar(year, month) {
             var daysInMonth = new Date(year, month + 1, 0).getDate();
             var firstDay = new Date(year, month, 1).getDay();
@@ -129,13 +95,23 @@
             }
 
             for (var day = 1; day <= daysInMonth; day++) {
-                calendar.append('<div class="day" data-date="' + year + '-' + (month + 1) + '-' + day + '">' + day + '</div>');
+                var date = year + '-' + (month + 1).toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+                var isSubmitted = submittedDates.includes(date);
+                var className = isSubmitted ? 'day submitted' : 'day';
+                calendar.append('<div class="' + className + '" data-date="' + date + '">' + day + '</div>');
             }
 
             $('.day').click(function() {
                 var selectedDate = $(this).data('date');
                 $('#selected-date').val(selectedDate);
-                $('#attendance-modal').show();
+
+                // フォームのアクションURLを動的に設定
+                var actionUrl = '/attendances/submitTimesheet/' + workerId + '/' + selectedDate;
+                console.log('Action URL:', actionUrl); // URLをコンソールに出力
+                $('#attendance-form').attr('action', actionUrl);
+
+                // ページをリダイレクト
+                window.location.href = '/part_time_worker/attendances/editSubmittedTimesheet/' + workerId + '/' + selectedDate;
             });
         }
 
@@ -162,7 +138,7 @@
             console.log(formData); // デバッグ用に送信データを確認
             $.ajax({
                 type: 'POST',
-                url: '/attendances/submittedTimesheet', // 新しいアクションのURL
+                url: $('#attendance-form').attr('action'),
                 data: formData,
                 success: function(response) {
                     alert('出勤情報が保存されました');
@@ -175,12 +151,3 @@
         });
     });
 </script>
-
-<!-- <?php
-echo $this->Form->create('SubmittedTimesheet', array('url' => array('controller' => 'attendances', 'action' => 'submitTimesheet', $workerId)));
-echo $this->Form->input('SubmittedTimesheet.check_in', array('type' => 'text', 'label' => false, 'div' => false, 'required' => true, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
-echo $this->Form->input('SubmittedTimesheet.check_out', array('type' => 'text', 'label' => false, 'div' => false, 'required' => true, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
-echo $this->Form->input('SubmittedTimesheet.break_start', array('type' => 'text', 'label' => false, 'div' => false, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
-echo $this->Form->input('SubmittedTimesheet.break_end', array('type' => 'text', 'label' => false, 'div' => false, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
-echo $this->Form->input('SubmittedTimesheet.date', array('type' => 'hidden', 'id' => 'selected-date', 'default' => null));
-echo $this->Form->end('保存');?> -->
