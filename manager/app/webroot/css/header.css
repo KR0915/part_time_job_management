@@ -1,33 +1,49 @@
 /* app/webroot/css/header.css */
+
 #header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px; /* 上下のパディングを20pxに、左右のパディングを30pxに設定 */
     background-color: #003d4c;
-    color: #fff;
-    padding: 10px;
-    text-align: left; /* 追加: 全体のテキストを左寄せ */
 }
 
-#header h1 {
+#header .header-title {
     margin: 0;
-    font-size: 2em;
-    text-align: left; /* 追加: h1要素を左寄せ */
-}
-
-#header nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#header nav ul li {
-    display: inline;
-    margin-right: 10px;
-}
-
-#header nav ul li a {
-    color: #fff;
+    font-size: 24px;
+    color: #fff; /* 色を白に設定 */
+    font-weight: bold;
     text-decoration: none;
 }
 
-#header nav ul li a:hover {
-    text-decoration: underline;
+.logout-button {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.button-group {
+    display: flex;
+    gap: 20px; /* ボタン間のスペースを設定 */
+}
+
+a.logout, .button.history, .attendance.record {
+    font-size: 18px;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px 10px; /* パディングを追加 */
+    text-decoration: none; /* アンダーバーを削除 */
+    font-weight: bold; /* 文字の太さを追加 */
+    border-radius: 5px; /* 角を丸くする */
+    display: flex;
+    align-items: center; /* ボタン内のテキストを中央揃え */
+}
+
+a.logout:hover, .button.history:hover, .attendance.record:hover {
+    color: #fff; /* ホバー時の色を元の色と同じに設定 */
+    background-color: transparent; /* 背景色を変更しない */
+    border: none; /* ボーダーを変更しない */
+    text-decoration: none; /* アンダーバーを削除 */
 }
