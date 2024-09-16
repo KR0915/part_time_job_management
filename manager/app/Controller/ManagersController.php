@@ -57,7 +57,12 @@ class ManagersController extends AppController {
     }
 
     public function dashboard($manager_id) {
+        if (!$manager_id) {
+            throw new NotFoundException(__('Invalid manager'));
+        }
+
         // ダッシュボードのロジックをここに追加
+        $this->set('manager_id', $manager_id);
     }
 
     public function index() {
