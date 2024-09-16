@@ -31,6 +31,26 @@
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
+	// Router::connect('/', array('controller' => 'managers', 'action' => 'login'));
+
+	// ログインページのルート
+	Router::connect('/login', array('controller' => 'managers', 'action' => 'login'));
+
+	// ログアウトページのルート
+	Router::connect('/logout', array('controller' => 'managers', 'action' => 'logout'));
+
+	/**
+	 * ManagersControllerのindexアクションへのルート
+	 */
+	// Router::connect('/index', array('controller' => 'managers', 'action' => 'index'));
+	// Router::connect('/manager/index', array('controller' => 'managers', 'action' => 'index'));
+
+	// ダッシュボードページのルート
+	Router::connect('/dashboard', array('controller' => 'managers', 'action' => 'dashboard'));
+
+	// デフォルトのCakePHPルート
+	require CAKE . 'Config' . DS . 'routes.php';
+
 /**
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.
