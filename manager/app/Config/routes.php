@@ -39,6 +39,12 @@
 	// ログアウトページのルート
 	Router::connect('/logout', array('controller' => 'managers', 'action' => 'logout'));
 
+	Router::connect(
+		'/manager/dashboard/:id',
+		array('controller' => 'managers', 'action' => 'dashboard'),
+		array('pass' => array('id'), 'id' => '[0-9]+')
+	);
+
 	/**
 	 * ManagersControllerのindexアクションへのルート
 	 */
