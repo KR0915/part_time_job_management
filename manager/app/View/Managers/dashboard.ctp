@@ -9,3 +9,9 @@ echo $this->Html->link('勤怠管理画面', array('controller' => 'confirmedTim
 echo '<br>';
 echo 'Generated URL: ' . $this->Html->url(array('controller' => 'confirmedTimesheets', 'action' => 'index', $manager_id));
 ?>
+<br />
+<?php
+echo $this->Html->link('給与管理画面', array('controller' => 'Attendances', 'action' => 'index', $manager_id));
+echo '<br>';
+echo 'Generated URL: ' . $this->Html->url(array('controller' => 'Attendances', 'action' => 'index', $manager_id));
+?>
