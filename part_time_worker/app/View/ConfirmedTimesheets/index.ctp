@@ -13,7 +13,8 @@
 
     <?php
     // カレンダーのヘッダーを表示
-    echo '<h2>' . h($monthName) . '</h2>';
+    $formattedMonthName = (new DateTime("$year-$month-01"))->format('Y年n月');
+    echo '<h2>' . h($formattedMonthName) . '</h2>';
     echo '<table class="calendar">';
     echo '<tr>';
     echo '<th>日</th>';
