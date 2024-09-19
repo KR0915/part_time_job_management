@@ -15,25 +15,25 @@
         <div class="edit-form-group">
             <?php
             echo $this->Form->label('check_in', '出勤時間');
-            echo $this->Form->input('SubmittedTimesheet.check_in', array('type' => 'text', 'label' => false, 'div' => false, 'required' => true, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
+            echo $this->Form->input('SubmittedTimesheet.check_in', array('type' => 'text', 'label' => false, 'div' => false, 'required' => true, 'default' => null, 'placeholder' => 'HH:MM'));
             ?>
         </div>
         <div class="edit-form-group">
             <?php
             echo $this->Form->label('check_out', '退勤時間');
-            echo $this->Form->input('SubmittedTimesheet.check_out', array('type' => 'text', 'label' => false, 'div' => false, 'required' => true, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
+            echo $this->Form->input('SubmittedTimesheet.check_out', array('type' => 'text', 'label' => false, 'div' => false, 'required' => true, 'default' => null, 'placeholder' => 'HH:MM'));
             ?>
         </div>
         <div class="edit-form-group">
             <?php
             echo $this->Form->label('break_start', '休憩開始時間');
-            echo $this->Form->input('SubmittedTimesheet.break_start', array('type' => 'text', 'label' => false, 'div' => false, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
+            echo $this->Form->input('SubmittedTimesheet.break_start', array('type' => 'text', 'label' => false, 'div' => false, 'default' => null, 'placeholder' => 'HH:MM'));
             ?>
         </div>
         <div class="edit-form-group">
             <?php
             echo $this->Form->label('break_end', '休憩終了時間');
-            echo $this->Form->input('SubmittedTimesheet.break_end', array('type' => 'text', 'label' => false, 'div' => false, 'default' => null, 'placeholder' => 'YYYY-MM-DD HH:MM:SS'));
+            echo $this->Form->input('SubmittedTimesheet.break_end', array('type' => 'text', 'label' => false, 'div' => false, 'default' => null, 'placeholder' => 'HH:MM'));
             ?>
         </div>
         <?php

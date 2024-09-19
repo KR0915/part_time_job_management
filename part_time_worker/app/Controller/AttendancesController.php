@@ -125,20 +125,45 @@ class AttendancesController extends AppController {
             $this->request->data['SubmittedTimesheet']['part_time_worker_id'] = $workerId;
             $this->request->data['SubmittedTimesheet']['date'] = $date;
     
-            // データを保存
-            if ($this->SubmittedTimesheet->save($this->request->data)) {
-                $this->Session->setFlash(__('出勤情報が更新されました。'));
-                return $this->redirect(array('action' => 'submitTimesheet', $workerId));
+            // 時間フィールドをY-m-d H:i:s形式に変換して保存
+            if (!empty($this->request->data['SubmittedTimesheet']['check_in'])) {
+                $this->request->data['SubmittedTimesheet']['check_in'] = date('Y-m-d H:i:s', strtotime($date . ' ' . $this->request->data['SubmittedTimesheet']['check_in']));
             }
-            $this->Flash->error(__('出勤情報の更新に失敗しました。もう一度お試しください。'));
+            if (!empty($this->request->data['SubmittedTimesheet']['check_out'])) {
+                $this->request->data['SubmittedTimesheet']['check_out'] = date('Y-m-d H:i:s', strtotime($date . ' ' . $this->request->data['SubmittedTimesheet']['check_out']));
+            }
+            if (!empty($this->request->data['SubmittedTimesheet']['break_start'])) {
+                $this->request->data['SubmittedTimesheet']['break_start'] = date('Y-m-d H:i:s', strtotime($date . ' ' . $this->request->data['SubmittedTimesheet']['break_start']));
+            }
+            if (!empty($this->request->data['SubmittedTimesheet']['break_end'])) {
+                $this->request->data['SubmittedTimesheet']['break_end'] = date('Y-m-d H:i:s', strtotime($date . ' ' . $this->request->data['SubmittedTimesheet']['break_end']));
+            }
+    
+            // データを保存
+            if ($this->SubmittedTimesheet->validates()) {
+                if ($this->SubmittedTimesheet->save($this->request->data)) {
+                    $this->Session->setFlash(__('出勤情報が更新されました。'));
+                    return $this->redirect(array('action' => 'submitTimesheet', $workerId));
+                }
+                $this->Flash->error(__('出勤情報の更新に失敗しました。もう一度お試しください。'));
+            } else {
+                $this->Flash->error(__('バリデーションエラーがあります。もう一度お試しください。'));
+            }
         }
     
         // 初期データをフォームに設定
         if (!$this->request->data) {
-            $this->request->data = $submittedTimesheet;
+            if (!empty($submittedTimesheet)) {
+                // 時間フィールドをHH:MM形式に変換
+                $submittedTimesheet['SubmittedTimesheet']['check_in'] = !empty($submittedTimesheet['SubmittedTimesheet']['check_in']) ? (new DateTime($submittedTimesheet['SubmittedTimesheet']['check_in']))->format('H:i') : '';
+                $submittedTimesheet['SubmittedTimesheet']['check_out'] = !empty($submittedTimesheet['SubmittedTimesheet']['check_out']) ? (new DateTime($submittedTimesheet['SubmittedTimesheet']['check_out']))->format('H:i') : '';
+                $submittedTimesheet['SubmittedTimesheet']['break_start'] = !empty($submittedTimesheet['SubmittedTimesheet']['break_start']) ? (new DateTime($submittedTimesheet['SubmittedTimesheet']['break_start']))->format('H:i') : '';
+                $submittedTimesheet['SubmittedTimesheet']['break_end'] = !empty($submittedTimesheet['SubmittedTimesheet']['break_end']) ? (new DateTime($submittedTimesheet['SubmittedTimesheet']['break_end']))->format('H:i') : '';
+                $this->request->data = $submittedTimesheet;
+            }
         }
-
-        $submittedTimesheetId = $submittedTimesheet['SubmittedTimesheet']['id'];
+    
+        $submittedTimesheetId = !empty($submittedTimesheet) ? $submittedTimesheet['SubmittedTimesheet']['id'] : null;
         $this->set(compact('workerId', 'submittedTimesheetId', 'date'));
     }
 
