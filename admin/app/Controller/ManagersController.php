@@ -6,7 +6,21 @@ class ManagersController extends AppController {
     public $uses = array('Manager', 'Company'); // ManagerとCompanyモデルをロード
 
     public function index() {
-        $managers = $this->Manager->find('all');
+        $conditions = array();
+
+        if ($this->request->is('post') || $this->request->is('get')) {
+            $search = $this->request->query('search');
+            if (!empty($search)) {
+                $conditions['OR'] = array(
+                    'Manager.name LIKE' => '%' . $search . '%',
+                    'Manager.email LIKE' => '%' . $search . '%'
+                );
+            }
+        }
+
+        $managers = $this->Manager->find('all', array(
+            'conditions' => $conditions
+        ));
         $companies = $this->Company->find('list', array(
             'fields' => array('id', 'name')
         ));
@@ -62,5 +76,26 @@ class ManagersController extends AppController {
         if (!$this->request->data) {
             $this->request->data = $manager;
         }
+    }
+
+    public function delete($id = null) {
+        if (!$id) {
+            throw new NotFoundException(__('無効な店長'));
+        }
+
+        $this->request->allowMethod(['post', 'delete']);
+
+        $manager = $this->Manager->findById($id);
+        if (!$manager) {
+            throw new NotFoundException(__('無効な店長'));
+        }
+
+        if ($this->Manager->delete($id)) {
+            $this->Flash->success(__('店長が削除されました。'));
+        } else {
+            $this->Flash->error(__('店長の削除に失敗しました。もう一度お試しください。'));
+        }
+
+        return $this->redirect(array('action' => 'index'));
     }
 }
