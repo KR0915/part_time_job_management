@@ -11,29 +11,30 @@
         <h1 class="mb-4">パートタイムワーカーを編集</h1>
         <?php
         echo $this->Form->create('PartTimeWorker', array('class' => 'form-horizontal'));
+        echo $this->Form->input('id', array('type' => 'hidden'));
         ?>
         <div class="form-group">
             <?php
             echo $this->Form->label('name', '名前', array('class' => 'control-label'));
-            echo $this->Form->input('name', array('type' => 'text', 'class' => 'form-control', 'required' => true));
+            echo $this->Form->input('name', array('label' => false, 'class' => 'form-control', 'required' => true));
             ?>
         </div>
         <div class="form-group">
             <?php
             echo $this->Form->label('company_id', '会社ID', array('class' => 'control-label'));
-            echo $this->Form->input('company_id', array('type' => 'select', 'options' => $companies, 'class' => 'form-control', 'required' => true));
+            echo $this->Form->input('company_id', array('type' => 'select', 'options' => $companies, 'label' => false, 'class' => 'form-control', 'required' => true));
             ?>
         </div>
         <div class="form-group">
             <?php
             echo $this->Form->label('email', 'メールアドレス', array('class' => 'control-label'));
-            echo $this->Form->input('email', array('type' => 'email', 'class' => 'form-control', 'required' => true));
+            echo $this->Form->input('email', array('label' => false, 'class' => 'form-control', 'required' => true));
             ?>
         </div>
         <div class="form-group">
             <?php
             echo $this->Form->label('password', 'パスワード', array('class' => 'control-label'));
-            echo $this->Form->input('password', array('type' => 'password', 'class' => 'form-control'));
+            echo $this->Form->input('password', array('type' => 'password', 'label' => false, 'class' => 'form-control'));
             ?>
         </div>
         <div class="form-group">
