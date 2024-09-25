@@ -1,8 +1,46 @@
-<h1>Add Company</h1>
-
-<?php
-echo $this->Form->create('Company');
-echo $this->Form->input('name', array('label' => 'Company Name'));
-echo $this->Form->input('email', array('label' => 'Email'));
-echo $this->Form->end('Submit');
-?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>会社追加</title>
+    <!-- Bootstrap CSSの読み込み -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">会社追加</h1>
+        <?php
+        echo $this->Form->create('Company', array('class' => 'form-horizontal'));
+        ?>
+        <div class="form-group">
+            <?php
+            echo $this->Form->label('name', 'Company Name', array('class' => 'control-label'));
+            echo $this->Form->input('name', array('label' => false, 'class' => 'form-control'));
+            ?>
+        </div>
+        <div class="form-group">
+            <?php
+            echo $this->Form->label('email', 'Email', array('class' => 'control-label'));
+            echo $this->Form->input('email', array('label' => false, 'class' => 'form-control'));
+            ?>
+        </div>
+        <div class="form-group">
+            <?php
+            echo $this->Form->button('Submit', array('class' => 'btn btn-primary'));
+            ?>
+        </div>
+        <?php
+        echo $this->Form->end();
+        ?>
+        <div class="form-group">
+            <?php
+            echo $this->Html->link('戻る', array('action' => 'index'), array('class' => 'btn btn-secondary'));
+            ?>
+        </div>
+    </div>
+    <!-- Bootstrap JSと依存するPopper.jsの読み込み -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

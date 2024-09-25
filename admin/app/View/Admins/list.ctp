@@ -10,6 +10,8 @@
     <div class="container mt-5">
         <h1 class="mb-4">管理者一覧</h1>
 
+        <p><?php echo $this->Html->link('管理者追加', array('action' => 'add'), array('class' => 'btn btn-primary mb-2')); ?></p>
+
         <?php echo $this->Form->create('Admin', array('type' => 'get', 'class' => 'form-inline mb-3')); ?>
         <div class="form-group mx-sm-3 mb-2">
             <?php echo $this->Form->input('name', array('label' => false, 'class' => 'form-control', 'placeholder' => 'Search by Admin Name', 'value' => $this->request->query('name'))); ?>
@@ -40,7 +42,6 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <p><?php echo $this->Html->link('管理者追加', array('action' => 'add'), array('class' => 'btn btn-primary mb-2')); ?></p>
     </div>
     <!-- Bootstrap JSと依存するPopper.jsの読み込み -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
