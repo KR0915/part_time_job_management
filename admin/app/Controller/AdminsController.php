@@ -35,8 +35,16 @@ class AdminsController extends AppController {
         return $this->redirect('/part_time_workers/login');
     }
 
-    public function list(){
-        $this->set('admins', $this->Admin->find('all'));
+    public function list() {
+        $conditions = array();
+
+        if ($this->request->is('get') && !empty($this->request->query('name'))) {
+            $conditions['Admin.username LIKE'] = '%' . $this->request->query('name') . '%';
+        }
+
+        $this->set('admins', $this->Admin->find('all', array(
+            'conditions' => $conditions
+        )));
     }
 
     public function add() {
@@ -44,7 +52,7 @@ class AdminsController extends AppController {
             $this->Admin->create();
             if ($this->Admin->save($this->request->data)) {
                 $this->Flash->success(__('The company has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                return $this->redirect(array('action' => 'list'));
             }
             $this->Flash->error(__('Unable to add the company.'));
         }
@@ -81,7 +89,7 @@ class AdminsController extends AppController {
             } else {
                 $this->Flash->error(__('Unable to delete the company.'));
             }
-            return $this->redirect(array('action' => 'index'));
+            return $this->redirect(array('action' => 'list'));
         }
     }
 
