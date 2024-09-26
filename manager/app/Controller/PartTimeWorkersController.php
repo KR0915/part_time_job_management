@@ -5,8 +5,14 @@ class PartTimeWorkersController extends AppController {
     public $uses = array('PartTimeWorker', 'Manager');
 
     public function index($manager_id) {
+        $companyId = $this->Manager->find('first', array(
+            'fields' => array('company_id'),
+            'conditions' => array('Manager.id' => $manager_id)
+        ));
         // part_time_workersテーブルから全てのレコードを取得
-        $partTimeWorkers = $this->PartTimeWorker->find('all');
+        $partTimeWorkers = $this->PartTimeWorker->find('all', array(
+            'conditions' => array('PartTimeWorker.company_id' => $companyId['Manager']['company_id'])
+        ));
         // ビューにデータを渡す
         $this->set('partTimeWorkers', $partTimeWorkers);
         $this->set('manager_id', $manager_id);
@@ -18,10 +24,10 @@ class PartTimeWorkersController extends AppController {
             // データを保存
             $this->PartTimeWorker->create();
             if ($this->PartTimeWorker->save($this->request->data)) {
-                $this->Flash->success(__('The part-time worker has been saved.'));
+                $this->Session->setFlash(__('The part-time worker has been saved.'));
                 return $this->redirect(array('action' => 'index', $manager_id));
             }
-            $this->Flash->error(__('Unable to add the part-time worker.'));
+            $this->Session->setFlash(__('Unable to add the part-time worker.'));
         }
 
         $manager = $this->Manager->find('first', array(
@@ -45,10 +51,10 @@ class PartTimeWorkersController extends AppController {
         if ($this->request->is(array('post', 'put'))) {
             $this->PartTimeWorker->id = $id;
             if ($this->PartTimeWorker->save($this->request->data)) {
-                $this->Flash->success(__('The part-time worker has been updated.'));
+                $this->Session->setFlash(__('The part-time worker has been updated.'));
                 return $this->redirect(array('action' => 'index', $manager_id));
             }
-            $this->Flash->error(__('Unable to update the part-time worker.'));
+            $this->Session->setFlash(__('Unable to update the part-time worker.'));
         }
 
         if (!$this->request->data) {
@@ -77,9 +83,9 @@ class PartTimeWorkersController extends AppController {
         }
     
         if ($this->PartTimeWorker->delete($id)) {
-            $this->Flash->success(__('The part-time worker with id: %s has been deleted.', h($id)));
+            $this->Session->setFlash(__('The part-time worker with id: %s has been deleted.', h($id)));
         } else {
-            $this->Flash->error(__('The part-time worker could not be deleted.'));
+            $this->Session->setFlash(__('The part-time worker could not be deleted.'));
         }
     
         return $this->redirect(array('action' => 'index', $manager_id));

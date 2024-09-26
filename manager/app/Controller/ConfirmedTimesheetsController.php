@@ -3,9 +3,22 @@ App::uses('AppController', 'Controller');
 
 class ConfirmedTimesheetsController extends AppController {
     public $helpers = array('Form');
-    public $uses = array('ConfirmedTimesheet', 'SubmittedTimesheet','PartTimeWorker'); // モデルを使用
+    public $uses = array('ConfirmedTimesheet', 'SubmittedTimesheet','PartTimeWorker','Manager'); // モデルを使用
 
     public function index() {
+        $manager_id = $this->Auth->user('id');
+        $company = $this->Manager->find('first', array(
+            'fields' => array('company_id'),
+            'conditions' => array('Manager.id' => $manager_id)
+        ));
+        $companyId = $company['Manager']['company_id'];
+        $partTimeWorkers = $this->PartTimeWorker->find('all', array(
+            'fields' => array('id'),
+            'conditions' => array('PartTimeWorker.company_id' => $companyId)
+        ));
+        
+        // パートタイムワーカーのIDを配列に変換
+        $partTimeWorkerIds = Hash::extract($partTimeWorkers, '{n}.PartTimeWorker.id');
         // デフォルトは現在の年と月
         $year = $this->request->query('year') ?: date('Y');
         $month = $this->request->query('month') ?: date('m');
@@ -20,18 +33,39 @@ class ConfirmedTimesheetsController extends AppController {
         // 月名を取得
         $monthName = $selectedDate->format('F Y');
 
-        $confirmData = $this->ConfirmedTimesheet->find('all');
+        $confirmData = $this->ConfirmedTimesheet->find('all', array(
+            'conditions' => array(
+                'ConfirmedTimesheet.date >=' => $firstDayOfMonth,
+                'ConfirmedTimesheet.date <=' => $lastDayOfMonth,
+                'ConfirmedTimesheet.part_time_worker_id' => $partTimeWorkerIds
+            ),
+            'contain' => array('PartTimeWorker')
+        ));
 
         // カレンダーのデータをビューに渡す
         $this->set(compact('firstDayOfMonth', 'lastDayOfMonth', 'monthName', 'year', 'month','confirmData'));
     }
 
     public function edit($year, $month, $day) {
+        $manager_id = $this->Auth->user('id');
+        $company = $this->Manager->find('first', array(
+            'fields' => array('company_id'),
+            'conditions' => array('Manager.id' => $manager_id)
+        ));
+        $companyId = $company['Manager']['company_id'];
+        $partTimeWorkers = $this->PartTimeWorker->find('all', array(
+            'fields' => array('id'),
+            'conditions' => array('PartTimeWorker.company_id' => $companyId)
+        ));
+        
+        // パートタイムワーカーのIDを配列に変換
+        $partTimeWorkerIds = Hash::extract($partTimeWorkers, '{n}.PartTimeWorker.id');
         // 指定された日付の勤怠データを取得
         $date = "$year-$month-$day";
         $timesheet = $this->SubmittedTimesheet->find('all', array(
             'conditions' => array(
                 'SubmittedTimesheet.date' => $date,
+                'SubmittedTimesheet.part_time_worker_id' => $partTimeWorkerIds
             ),
             'contain' => array('PartTimeWorker', 'ConfirmedTimesheet') // PartTimeWorkerとConfirmedTimesheetのデータを含める
         ));
@@ -71,7 +105,7 @@ class ConfirmedTimesheetsController extends AppController {
                     ));
                 }
             }
-            $this->Flash->success('勤怠データが保存されました。');
+            $this->Session->setFlash('勤怠データが保存されました。');
             // $dateから年と月を取得
             $date = $this->request->data['ConfirmedTimesheet'][array_key_first($this->request->data['ConfirmedTimesheet'])]['date'];
             $year = date('Y', strtotime($date));
