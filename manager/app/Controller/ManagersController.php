@@ -47,7 +47,7 @@ class ManagersController extends AppController {
                 return $this->redirect(array('controller' => 'managers', 'action' => 'dashboard',$manager['Manager']['id']));
             } else {
                 // ログイン失敗
-                $this->Flash->error(__('Invalid email or password, try again'));
+                $this->Session->setFlash(__('Invalid email or password, try again'));
             }
         }
     }

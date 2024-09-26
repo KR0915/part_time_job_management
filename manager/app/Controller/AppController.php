@@ -30,5 +30,30 @@ App::uses('Controller', 'Controller');
  * @package		app.Controller
  * @link		https://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
+
+// app/Controller/AppController.php
 class AppController extends Controller {
+    public $components = array(
+        'Session',
+        'Auth' => array(
+            'loginRedirect' => array('controller' => 'managers', 'action' => 'dashboard'),
+            'logoutRedirect' => array('controller' => 'managers', 'action' => 'login'),
+            'authenticate' => array(
+                'Form' => array(
+                    'fields' => array('username' => 'email')
+                )
+            ),
+            'authorize' => array('Controller') // この行を追加して、認可を有効にします
+        )
+    );
+
+    public function beforeFilter() {
+        // 認証を必要としないアクションを指定
+        $this->Auth->allow('login', 'logout');
+    }
+
+    public function isAuthorized($user) {
+        // デフォルトでは、すべてのユーザーがアクセス可能
+        return true;
+    }
 }

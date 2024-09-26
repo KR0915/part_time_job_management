@@ -1,8 +1,20 @@
 <?php
 class AttendancesController extends AppController {
-    public $uses = array('Attendance', 'PartTimeWorker');
+    public $uses = array('Attendance', 'PartTimeWorker', 'Manager');
 
     public function index() {
+        $manager_id = $this->Auth->user('id');
+        $company = $this->Manager->find('first', array(
+            'fields' => array('company_id'),
+            'conditions' => array('Manager.id' => $manager_id)
+        ));
+        $companyId = $company['Manager']['company_id'];
+        $partTimeWorkers = $this->PartTimeWorker->find('all', array(
+            'fields' => array('id'),
+            'conditions' => array('PartTimeWorker.company_id' => $companyId)
+        ));
+        // パートタイムワーカーのIDを配列に変換
+        $partTimeWorkerIds = Hash::extract($partTimeWorkers, '{n}.PartTimeWorker.id');
         // 年と月のパラメータを取得
         $year = isset($this->request->query['year']) ? $this->request->query['year'] : date('Y');
         $month = isset($this->request->query['month']) ? $this->request->query['month'] : date('m');
@@ -15,7 +27,8 @@ class AttendancesController extends AppController {
         // 検索条件を設定
         $conditions = array(
             'Attendance.check_in >=' => $firstDayOfMonth,
-            'Attendance.check_out <=' => $lastDayOfMonth
+            'Attendance.check_out <=' => $lastDayOfMonth,
+            'Attendance.part_time_worker_id' => $partTimeWorkerIds
         );
         if (!empty($searchName)) {
             $conditions['PartTimeWorker.name LIKE'] = '%' . $searchName . '%';
