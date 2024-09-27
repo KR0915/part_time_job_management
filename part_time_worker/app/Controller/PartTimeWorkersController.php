@@ -1,7 +1,7 @@
 <?php
 // app/Controller/PartTimeWorkersController.php
 class PartTimeWorkersController extends AppController {
-    public $uses = array('PartTimeWorker', 'Attendance'); // 使用するモデルを指定
+    public $uses = array('PartTimeWorker', 'Attendance','Company'); // 使用するモデルを指定
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -25,8 +25,15 @@ class PartTimeWorkersController extends AppController {
                     'PartTimeWorker.password' => $password
                 )
             ));
+            $companyStatus = $this->Company->find('first', array(
+                'fields' => array('Company.status'),
+                'conditions' => array(
+                    'Company.id' => $worker['PartTimeWorker']['company_id'],
+                )
+            ));
             
-            if ($worker) {
+            
+            if ($worker && $companyStatus['Company']['status'] == 'active') {
                 // ログイン成功時のリダイレクト先を指定
                 $this->Auth->login($worker['PartTimeWorker']);
                 $workerId = $worker['PartTimeWorker']['id'];

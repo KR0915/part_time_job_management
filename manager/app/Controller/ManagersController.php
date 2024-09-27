@@ -2,6 +2,7 @@
 App::uses('AppController', 'Controller');
 
 class ManagersController extends AppController {
+    public $uses = array('Company', 'Manager');
     public $components = array(
         'Session',
         'Auth' => array(
@@ -40,8 +41,14 @@ class ManagersController extends AppController {
                     'Manager.password' => $password
                 )
             ));
+            $companyStatus = $this->Company->find('first', array(
+                'fields' => array('Company.status'),
+                'conditions' => array(
+                    'Company.id' => $manager['Manager']['company_id'],
+                )
+            ));
 
-            if (!empty($manager)) {
+            if (!empty($manager) && $companyStatus['Company']['status'] == 'active') {
                 // ログイン成功
                 $this->Auth->login($manager['Manager']);
                 return $this->redirect(array('controller' => 'managers', 'action' => 'dashboard',$manager['Manager']['id']));
