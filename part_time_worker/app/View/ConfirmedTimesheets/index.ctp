@@ -57,7 +57,7 @@
         $class = $isConfirmed ? 'confirmed' : '';
 
         echo '<td class="' . $class . '">';
-        echo '<a href="' . $this->Html->url(array('controller' => 'confirmedTimesheets', 'action' => 'edit', $currentDay->format('Y'), $currentDay->format('m'), $currentDay->format('d'))) . '">';
+        echo '<a href="#"' . $this->Html->url(array('controller' => 'confirmedTimesheets', 'action' => 'edit', $currentDay->format('Y'), $currentDay->format('m'), $currentDay->format('d'))) . '">';
         echo '<div>' . $currentDay->format('j') . '</div>';
         if ($workHours) {
             echo '<div class="work-hours">' . h($workHours) . '</div>';
