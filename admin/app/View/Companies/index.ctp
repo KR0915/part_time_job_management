@@ -50,6 +50,7 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <br />
     </div>
     <!-- Bootstrap JSと依存するPopper.jsの読み込み -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

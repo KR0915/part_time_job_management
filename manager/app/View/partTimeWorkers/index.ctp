@@ -28,7 +28,7 @@
                         <td><?php echo h($worker['PartTimeWorker']['password']); ?></td>
                         <td><?php echo h($worker['PartTimeWorker']['hourly_wage']); ?></td>
                         <td>
-                            <?php echo $this->Html->link('編集', array('controller' => 'partTimeWorkers', 'action' => 'edit', $worker['PartTimeWorker']['id'], $manager_id), array('class' => 'btn btn-warning btn-sm')); ?>
+                            <?php echo $this->Html->link('編集', array('controller' => 'partTimeWorkers', 'action' => 'edit', $worker['PartTimeWorker']['id'], $manager_id), array('class' => 'btn btn-primary btn-sm')); ?>
                             <?php echo $this->Form->postLink('削除', array('controller' => 'partTimeWorkers', 'action' => 'delete', $worker['PartTimeWorker']['id'], $manager_id), array('confirm' => '本当に削除しますか？', 'class' => 'btn btn-danger btn-sm')); ?>
                         </td>
                     </tr>

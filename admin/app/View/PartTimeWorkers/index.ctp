@@ -42,13 +42,14 @@
                         <td><?php echo $worker['PartTimeWorker']['created']; ?></td>
                         <td><?php echo $worker['PartTimeWorker']['modified']; ?></td>
                         <td>
-                            <?php echo $this->Html->link('編集', array('action' => 'edit', $worker['PartTimeWorker']['id']), array('class' => 'btn btn-warning btn-sm')); ?>
+                            <?php echo $this->Html->link('編集', array('action' => 'edit', $worker['PartTimeWorker']['id']), array('class' => 'btn btn-primary btn-sm')); ?>
                             <?php echo $this->Form->postLink('削除', array('action' => 'delete', $worker['PartTimeWorker']['id']), array('confirm' => '本当にこのパートタイムワーカーを削除しますか？', 'class' => 'btn btn-danger btn-sm')); ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <br />
     </div>
     <!-- Bootstrap JSと依存するPopper.jsの読み込み -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
