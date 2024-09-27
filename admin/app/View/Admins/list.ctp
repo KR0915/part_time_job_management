@@ -35,13 +35,14 @@
                     <td><?php echo h($admin['Admin']['email']); ?></td>
                     <td><?php echo h($admin['Admin']['password']); ?></td>
                     <td>
-                        <?php echo $this->Html->link('Edit', array('action' => 'edit', $admin['Admin']['id']), array('class' => 'btn btn-warning btn-sm')); ?>
+                        <?php echo $this->Html->link('Edit', array('action' => 'edit', $admin['Admin']['id']), array('class' => 'btn btn-primary btn-sm')); ?>
                         <?php echo $this->Form->postLink('Delete', array('action' => 'delete', $admin['Admin']['id']), array('class' => 'btn btn-danger btn-sm'), __('Are you sure?')); ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <br />
     </div>
     <!-- Bootstrap JSと依存するPopper.jsの読み込み -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
